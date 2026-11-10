@@ -1,0 +1,274 @@
+/* Marquee tracks (inner movers). Containers keep overflow:hidden. */
+@keyframes vpnteco-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes vpnteco-marquee-reverse {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+.vpnteco-marquee-track {
+  display: flex !important;
+  flex: none !important;
+  width: max-content !important;
+  align-items: center;
+  will-change: transform;
+}
+
+.vpnteco-marquee-track.is-left {
+  animation: vpnteco-marquee 36s linear infinite !important;
+}
+
+.vpnteco-marquee-track.is-right {
+  /* Same path as left so the viewport stays filled; reverse direction only */
+  animation: vpnteco-marquee 36s linear infinite reverse !important;
+}
+
+.vpnteco-marquee-track.is-hero {
+  animation: vpnteco-marquee 28s linear infinite !important;
+}
+
+.vpnteco-marquee-track.is-highlights {
+  animation: vpnteco-marquee 40s linear infinite !important;
+}
+
+.vpnteco-marquee-track.is-testimonials {
+  animation: vpnteco-marquee 45s linear infinite !important;
+}
+
+/* Trusted By: restore overflow viewport, never translate the container itself */
+.brand-ticker {
+  overflow: hidden;
+}
+
+.brand-ticker-wrap {
+  overflow: hidden !important;
+  width: 100% !important;
+}
+
+.brand-ticker-left,
+.brand-ticker-right {
+  display: flex !important;
+  /* Keep row (not row-reverse) so the marquee track is left-anchored;
+     row-reverse on the container right-aligns a wide track and -50% x
+     empties the viewport for most of the loop. */
+  flex-flow: row !important;
+  align-items: center !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 84px !important;
+  padding-top: 25px !important;
+  padding-bottom: 25px !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+.brand-ticker-left-list,
+.brand-ticker-right-list {
+  display: flex !important;
+  flex: none !important;
+  align-items: center !important;
+}
+
+.brand-logo {
+  width: auto !important;
+  height: 34px !important;
+  max-width: 180px !important;
+  object-fit: contain !important;
+  opacity: 0.95;
+}
+
+.hero-ticker-lp-01,
+.highlights-lp-01-bottom,
+.testimonial-ticker {
+  overflow: hidden !important;
+  transform: none !important;
+  animation: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.hero-ticker-lp-01 {
+  display: flex !important;
+}
+
+/* Keep scroll-fade items visible if IX2 never binds */
+html.w-mod-js .scroll-fade-in,
+html.w-mod-js .hero-title,
+html.w-mod-js .section-title,
+html.w-mod-js .menu-in,
+html.w-mod-js .cta-button-link,
+html.w-mod-js .pricing-card-price-text-wrap.monthly,
+html.w-mod-js .pricing-card-price-text-wrap.yearly {
+  visibility: visible !important;
+}
+
+.scroll-fade-in.is-visible,
+.vpnteco-revealed {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.brand-ticker-left.scroll-fade-in,
+.brand-ticker-right.scroll-fade-in,
+.brand-ticker-left.vpnteco-revealed,
+.brand-ticker-right.vpnteco-revealed {
+  transform: none !important;
+}
+
+/* Mobile / overlay menu
+   header-* uses backdrop-filter which makes position:fixed descendants
+   size to the header instead of the viewport — clear it while open. */
+body.vpnteco-menu-open .header-primary,
+body.vpnteco-menu-open .header-secondary,
+body.vpnteco-menu-open .navbar {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+.menu-hamburger {
+  z-index: 1200 !important;
+}
+
+.menu-hamburger.is-open {
+  pointer-events: auto !important;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: none !important;
+}
+
+.menu-hamburger.is-open .menu-in {
+  transform: translate3d(0, 0, 0) !important;
+  translate: none !important;
+  rotate: none !important;
+  scale: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.menu-in {
+  /* Transform toggled without CSS transition — see initMobileMenu */
+  transition: none !important;
+}
+
+body.vpnteco-menu-open {
+  overflow: hidden !important;
+}
+
+.hamburger-item,
+.menu-open-button {
+  cursor: pointer;
+}
+
+.menu-close-button {
+  cursor: pointer;
+  pointer-events: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vpnteco-marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+  .menu-in {
+    transition: none !important;
+  }
+}
+
+/* Functional form UI */
+.field-error {
+  margin: 8px 0 0;
+  color: #ff8d8d;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.text-field.is-invalid,
+.auth-input.is-invalid,
+.newslatter-form-input.is-invalid {
+  border-color: #ff5c5c !important;
+  box-shadow: 0 0 0 3px rgba(255, 92, 92, 0.15);
+}
+.vpnteco-status {
+  display: none;
+  margin-top: 16px;
+  padding: 18px 16px;
+  border-radius: 16px;
+  animation: vpnteco-status-in 0.35s ease both;
+}
+.vpnteco-status.is-visible {
+  display: block !important;
+}
+.vpnteco-status-inner {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.vpnteco-status-icon {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  background: rgba(46, 204, 113, 0.18);
+  color: #b8f5d0;
+}
+.vpnteco-status.is-error .vpnteco-status-icon,
+.form-error .vpnteco-status-icon,
+.w-form-fail .vpnteco-status-icon {
+  background: rgba(255, 92, 92, 0.16);
+  color: #ffb4b4;
+}
+.vpnteco-status-copy {
+  display: grid;
+  gap: 4px;
+}
+.vpnteco-status-copy strong {
+  color: #fff;
+  font-size: 15px;
+}
+.vpnteco-status-copy p {
+  margin: 0;
+  color: #b8f5d0;
+  line-height: 1.45;
+}
+.vpnteco-status.is-error .vpnteco-status-copy p,
+.form-error .vpnteco-status-copy p,
+.w-form-fail .vpnteco-status-copy p {
+  color: #ffb4b4;
+}
+.w-form-done,
+.success-message,
+.form-success {
+  background: rgba(46, 204, 113, 0.12);
+  border: 1px solid rgba(46, 204, 113, 0.35);
+  color: #b8f5d0;
+}
+.w-form-fail,
+.error-message,
+.form-error {
+  background: rgba(255, 92, 92, 0.1);
+  border: 1px solid rgba(255, 92, 92, 0.35);
+  color: #ffb4b4;
+}
+.submit-button.is-loading,
+.newslatter-button.is-loading,
+.auth-submit.is-loading,
+.contact-form .submit-button:disabled,
+.newslatter-button:disabled,
+.auth-submit:disabled {
+  opacity: 0.72 !important;
+  cursor: wait !important;
+}
+@keyframes vpnteco-status-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}

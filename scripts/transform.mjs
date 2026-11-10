@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
 const publicDir = path.join(root, 'public')
+const rawDir = path.join(root, 'raw')
 const outDir = path.join(root, 'site')
 const base = '/vpnteco'
 
@@ -166,7 +167,7 @@ for (const file of fs.readdirSync(path.join(publicDir, 'assets'))) {
 }
 
 for (const page of pages) {
-  const src = path.join(publicDir, page.raw)
+  const src = path.join(rawDir, page.raw)
   if (!fs.existsSync(src)) {
     console.warn('missing', page.raw)
     continue

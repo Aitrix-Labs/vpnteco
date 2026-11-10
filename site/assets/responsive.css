@@ -1,0 +1,353 @@
+/* Vpnteco responsive hardening on top of Webflow base styles */
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+img,
+video,
+svg,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+.w-layout-blockcontainer.container,
+.container {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Header / auth */
+.header-secondary,
+.header-primary,
+.navbar.w-nav,
+.nav-content-wrap {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.header-auth-wrap {
+  flex-shrink: 0;
+}
+
+.nav-brand-logo {
+  max-width: 140px;
+  height: auto;
+}
+
+.hero-lp-01,
+.hero-bg-video-lp-01,
+.hero-content-lp-01 {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 991px) {
+  .nav-content-wrap {
+    width: 100%;
+    align-items: center;
+  }
+
+  .header-auth-wrap {
+    min-width: 0 !important;
+    min-height: 56px !important;
+    padding: 0 10px !important;
+    gap: 6px !important;
+    border-left: 0 !important;
+  }
+
+  .header-auth-link {
+    font-size: 13px !important;
+    padding: 8px 10px !important;
+  }
+
+  .header-auth-link:not(.header-auth-signup) {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+
+  .hero-title,
+  .hero-title.lp-01,
+  h1.hero-title {
+    font-size: clamp(34px, 9vw, 56px) !important;
+    line-height: 1.1 !important;
+    word-break: break-word;
+  }
+
+  .hero-lp-01-button-wrap,
+  .feature-hero-bottom {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .primary-button,
+  .secondary-button,
+  .submit-button {
+    max-width: 100%;
+  }
+
+  .feature-lp-01-card,
+  .pricing-lp-01-card,
+  .about-lp-01-stat-block,
+  .works-lp-01-card,
+  .info-card {
+    width: 100%;
+  }
+
+  .feature-lp-01-card {
+    flex-direction: column !important;
+    padding: 28px 20px !important;
+  }
+
+  .feature-lp-01-card-image,
+  .feature-lp-01-card-image-block,
+  .works-lp-01-card-image,
+  .hero-image-lp-01,
+  .global-map {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .section-title,
+  .section-title.feature-01,
+  .section-title.how-it-works-01,
+  .section-title.pricing-lp-01-title,
+  .section-title.dark-title {
+    font-size: clamp(28px, 7vw, 44px) !important;
+    line-height: 1.15 !important;
+  }
+
+  .footer-menu-wrap,
+  .footer-top-content-wrap,
+  .contact-info-bottom,
+  .pricing-lp-01-bottom,
+  .about-lp-01-bottom,
+  .how-it-works-lp-01-bottom {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .footer-logo-with-reserved-wrap {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 12px;
+  }
+
+  .footer-brand {
+    max-width: min(100%, 280px);
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .header-secondary,
+  .header-primary,
+  .navbar,
+  .nav-content-wrap {
+    min-height: 64px;
+  }
+
+  .nav-content-wrap {
+    justify-content: space-between !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    gap: 8px !important;
+  }
+
+  .nav-brand-logo {
+    max-width: 118px;
+  }
+
+  /* Auth CTAs live in the hamburger menu on mobile */
+  .header-auth-wrap {
+    display: none !important;
+  }
+
+  .hero-tag-lp-01,
+  .hero-banner-lp-01,
+  .hero-lp-01-content-wrap {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .hero-lp-01,
+  .hero-content-lp-01,
+  .hero-bg-video-lp-01 {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box;
+  }
+
+  /* SplitText letter masks can clip/overflow on narrow screens */
+  .hero-title,
+  .hero-title.lp-01,
+  .section-title {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .hero-title .gsap_split_letter-mask,
+  .hero-title .gsap_split_letter,
+  .section-title .gsap_split_letter-mask,
+  .section-title .gsap_split_letter {
+    overflow: visible !important;
+  }
+
+  .hero-title .gsap_split_word,
+  .section-title .gsap_split_word {
+    display: inline !important;
+    white-space: normal !important;
+  }
+
+  .hero-ticker-lp-01,
+  .network-ticker-list {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .country-block {
+    flex-shrink: 0;
+  }
+
+  .section-padding-l,
+  .section-padding-m {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .w-layout-blockcontainer.container,
+  .container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .field-wrap {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .form-field,
+  .text-field,
+  .text-field.message,
+  .submit-button {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .pricing-lp-01-card,
+  .pricing-lp-01-card-content {
+    width: 100%;
+  }
+
+  .pricing-switch-wrap {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .testimonial-ticker,
+  .brand-ticker-wrap,
+  .highlights-card-ticker {
+    overflow: hidden;
+  }
+
+  .menu-content {
+    flex-direction: column !important;
+  }
+
+  .menu-content-image {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+  }
+
+  .menu-item-wrap {
+    width: 100%;
+  }
+
+  .global-network-title-wrap h2 {
+    font-size: clamp(26px, 8vw, 40px) !important;
+  }
+
+  .device-lp-01-bg,
+  .device-lp-01-content {
+    min-height: 360px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .nav-brand-logo {
+    max-width: 104px;
+  }
+
+  .header-auth-signup {
+    font-size: 12px !important;
+    padding: 7px 10px !important;
+  }
+
+  .hero-title,
+  .hero-title.lp-01,
+  h1.hero-title {
+    font-size: clamp(28px, 10vw, 36px) !important;
+  }
+
+  .button-text,
+  .nav-menu-link,
+  .section-tag-text {
+    font-size: 14px !important;
+  }
+
+  .feature-lp-01-card,
+  .pricing-lp-01-card,
+  .info-card,
+  .works-lp-01-card {
+    padding: 20px 16px !important;
+  }
+
+  .about-lp-01-stat-number-with-text,
+  .counter-widget-number {
+    font-size: clamp(28px, 10vw, 40px) !important;
+  }
+}
+
+/* Auth pages */
+@media screen and (max-width: 640px) {
+  .auth-nav {
+    padding: 14px 16px !important;
+  }
+
+  .auth-main {
+    padding: 28px 14px !important;
+  }
+
+  .auth-card {
+    padding: 24px 18px !important;
+    border-radius: 16px !important;
+  }
+
+  .auth-card h1 {
+    font-size: 30px !important;
+  }
+}
+
+/* Prevent horizontal drag on mobile from sticky/overflowing tickers */
+@media screen and (max-width: 991px) {
+  .brand-ticker,
+  .testimonial-lp-01,
+  .highlights-lp-01,
+  .hero-ticker-lp-01 {
+    overflow-x: hidden;
+  }
+}

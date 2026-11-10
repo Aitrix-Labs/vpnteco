@@ -9,7 +9,7 @@ const base = '/vpnteco'
 function page(kind) {
   const isSignIn = kind === 'signin'
   const title = isSignIn ? 'Sign In' : 'Sign Up'
-  const otherHref = isSignIn ? `${base}/signup.html` : `${base}/signin.html`
+  const otherHref = isSignIn ? `${base}/signup` : `${base}/signin`
   const otherLabel = isSignIn ? 'Sign Up' : 'Sign In'
   const submit = isSignIn ? 'Sign In' : 'Create Account'
 
@@ -33,11 +33,11 @@ function page(kind) {
   const extras = isSignIn
     ? `<div class="auth-row">
         <label class="auth-check"><input type="checkbox" name="remember" /> Remember me</label>
-        <a class="auth-link" href="${base}/contact.html">Forgot password?</a>
+        <a class="auth-link" href="${base}/contact">Forgot password?</a>
       </div>`
     : `<label class="auth-check auth-check-block">
         <input type="checkbox" name="terms" required />
-        <span>I agree to the <a class="auth-link" href="${base}/licenses.html">Terms</a> and Privacy Policy</span>
+        <span>I agree to the <a class="auth-link" href="${base}/licenses">Terms</a> and Privacy Policy</span>
       </label>`
 
   return `<!DOCTYPE html>

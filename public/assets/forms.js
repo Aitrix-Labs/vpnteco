@@ -8,13 +8,17 @@
     field.setAttribute('aria-invalid', 'true')
     const tip = document.createElement('p')
     tip.className = 'field-error'
+    tip.setAttribute('role', 'alert')
     tip.textContent = message
-    field.insertAdjacentElement('afterend', tip)
+    const host = field.closest('.form-field, .auth-field, .auth-input-wrap') || field
+    host.insertAdjacentElement('afterend', tip)
   }
 
   function clearFieldError(field) {
     field.classList.remove('is-invalid')
     field.removeAttribute('aria-invalid')
+    const wrap = field.closest('.form-field, .auth-field') || field.parentElement
+    wrap?.querySelectorAll?.('.field-error')?.forEach((el) => el.remove())
     const next = field.nextElementSibling
     if (next?.classList.contains('field-error')) next.remove()
   }
@@ -30,9 +34,10 @@
   function validateRequired(form) {
     let valid = true
     clearFormErrors(form)
-    form.querySelectorAll('input, textarea').forEach((field) => {
-      if (field.type === 'submit' || field.type === 'button' || field.type === 'hidden' || field.type === 'checkbox') {
-        if (field.type === 'checkbox' && field.required && !field.checked) {
+    form.querySelectorAll('input, textarea, select').forEach((field) => {
+      if (field.type === 'submit' || field.type === 'button' || field.type === 'hidden') return
+      if (field.type === 'checkbox') {
+        if (field.required && !field.checked) {
           setFieldError(field, 'Please accept to continue.')
           valid = false
         }
@@ -64,38 +69,85 @@
   }
 
   function getWrap(form) {
-    return form.closest('.w-form') || form.parentElement
+    return form.closest('.w-form, .auth-panel, .contact-form-block, .newslatter-form-block') || form.parentElement
+  }
+
+  function ensureStatusBoxes(wrap, form) {
+    if (!wrap) return { success: null, error: null }
+    let success = wrap.querySelector('.w-form-done, .success-message, .form-success')
+    let error = wrap.querySelector('.w-form-fail, .error-message, .form-error')
+
+    if (!success) {
+      success = document.createElement('div')
+      success.className = 'form-success success-message w-form-done vpnteco-status'
+      success.innerHTML =
+        '<div class="vpnteco-status-inner"><span class="vpnteco-status-icon" aria-hidden="true">✓</span><div class="vpnteco-status-copy"><strong>Success</strong><p></p></div></div>'
+      form.insertAdjacentElement('afterend', success)
+    } else if (!success.querySelector('.vpnteco-status-inner')) {
+      const text = success.textContent?.trim() || ''
+      success.classList.add('vpnteco-status')
+      success.innerHTML = `<div class="vpnteco-status-inner"><span class="vpnteco-status-icon" aria-hidden="true">✓</span><div class="vpnteco-status-copy"><strong>Success</strong><p>${text}</p></div></div>`
+    }
+
+    if (!error) {
+      error = document.createElement('div')
+      error.className = 'form-error error-message w-form-fail vpnteco-status is-error'
+      error.innerHTML =
+        '<div class="vpnteco-status-inner"><span class="vpnteco-status-icon" aria-hidden="true">!</span><div class="vpnteco-status-copy"><strong>Something went wrong</strong><p>Please try again.</p></div></div>'
+      success.insertAdjacentElement('afterend', error)
+    }
+
+    return { success, error }
   }
 
   function hideError(wrap) {
     if (!wrap) return
-    wrap.querySelectorAll('.w-form-fail, .error-message, .form-error').forEach((error) => {
-      error.style.setProperty('display', 'none', 'important')
-      error.classList.remove('is-visible')
-      error.setAttribute('hidden', '')
+    wrap.querySelectorAll('.w-form-fail, .error-message, .form-error').forEach((node) => {
+      node.style.setProperty('display', 'none', 'important')
+      node.classList.remove('is-visible')
+      node.setAttribute('hidden', '')
     })
     wrap.classList.remove('vpnteco-form-error')
+  }
+
+  function showError(form, message) {
+    const wrap = getWrap(form)
+    const { error } = ensureStatusBoxes(wrap, form)
+    hideError(wrap)
+    if (error) {
+      const copy = error.querySelector('.vpnteco-status-copy p') || error.querySelector('div') || error
+      if (copy) copy.textContent = message || 'Something went wrong. Please try again.'
+      error.removeAttribute('hidden')
+      error.style.setProperty('display', 'block', 'important')
+      error.classList.add('is-visible')
+    }
+    wrap?.classList.add('vpnteco-form-error')
   }
 
   function showSuccess(form, successText) {
     const wrap = getWrap(form)
     if (!wrap) return
+    const { success } = ensureStatusBoxes(wrap, form)
     hideError(wrap)
 
-    const success = wrap.querySelector('.w-form-done, .success-message, .form-success')
-    if (successText && success) {
-      const target = success.querySelector('div') || success
-      target.textContent = successText
+    if (success && successText) {
+      const copy = success.querySelector('.vpnteco-status-copy p') || success.querySelector('p') || success.querySelector('div') || success
+      if (copy) copy.textContent = successText
+      const title = success.querySelector('.vpnteco-status-copy strong')
+      if (title) title.textContent = 'Success'
     }
 
     form.style.setProperty('display', 'none', 'important')
+    form.setAttribute('aria-hidden', 'true')
     if (success) {
       success.removeAttribute('hidden')
       success.style.setProperty('display', 'block', 'important')
       success.classList.add('is-visible')
+      success.setAttribute('tabindex', '-1')
+      success.focus?.({ preventScroll: true })
     }
     wrap.classList.add('vpnteco-form-success')
-    wrap.classList.remove('w-form-loading')
+    wrap.classList.remove('w-form-loading', 'vpnteco-form-error')
   }
 
   function unlockSubmit(submit, form) {
@@ -108,13 +160,28 @@
     submit.style.setProperty('opacity', '1', 'important')
     submit.style.setProperty('visibility', 'visible', 'important')
     submit.classList.add('is-in')
+    submit.classList.remove('is-loading')
     if (submit.tagName === 'INPUT' && /subscribe/i.test(submit.value) && form?.classList.contains('contact-form')) {
       submit.value = 'Send Message'
     }
   }
 
+  function setLoading(submit, loading, original) {
+    if (!submit) return
+    if (loading) {
+      submit.disabled = true
+      submit.classList.add('is-loading')
+      if (submit.tagName === 'INPUT') submit.value = submit.getAttribute('data-wait') || 'Please wait...'
+      else submit.textContent = submit.getAttribute('data-wait') || 'Please wait...'
+      return
+    }
+    submit.disabled = false
+    submit.classList.remove('is-loading')
+    if (submit.tagName === 'INPUT') submit.value = original
+    else submit.textContent = original
+  }
+
   function disableWebflowForm(form) {
-    // Stop Webflow/Turnstile from owning submit (they show the Oops fail state).
     form.removeAttribute('data-turnstile-sitekey')
     form.setAttribute('data-wf-ignore-form', 'true')
     form.setAttribute('novalidate', '')
@@ -125,26 +192,24 @@
     }
   }
 
-  function wireSubmit(form, { successText } = {}) {
+  function wireSubmit(form, { successText, onSuccess } = {}) {
     if (form.dataset.vpntecoWired === '1') return
     form.dataset.vpntecoWired = '1'
 
     disableWebflowForm(form)
+    ensureStatusBoxes(getWrap(form), form)
     form.querySelectorAll('.scroll-fade-in').forEach((el) => el.classList.add('is-in'))
 
     const submit =
       form.querySelector('input[type="submit"]') ||
       form.querySelector('button[type="submit"]')
     unlockSubmit(submit, form)
-    const unlockTimer = window.setInterval(() => unlockSubmit(submit, form), 400)
-    window.setTimeout(() => window.clearInterval(unlockTimer), 4000)
 
-    form.querySelectorAll('input, textarea').forEach((field) => {
+    form.querySelectorAll('input, textarea, select').forEach((field) => {
       field.addEventListener('input', () => clearFieldError(field))
       field.addEventListener('change', () => clearFieldError(field))
     })
 
-    // Capture phase so this runs before Webflow's submit handler.
     form.addEventListener(
       'submit',
       async (event) => {
@@ -153,26 +218,24 @@
         event.stopImmediatePropagation()
 
         hideError(getWrap(form))
-        if (!validateRequired(form)) return
-
-        const waitLabel = submit?.getAttribute('data-wait') || 'Please wait...'
-        const original =
-          submit?.tagName === 'INPUT' ? submit.value : submit?.textContent || 'Submit'
-
-        if (submit) {
-          submit.disabled = true
-          if (submit.tagName === 'INPUT') submit.value = waitLabel
-          else submit.textContent = waitLabel
+        if (!validateRequired(form)) {
+          const firstInvalid = form.querySelector('.is-invalid')
+          firstInvalid?.focus?.()
+          return
         }
 
-        await new Promise((resolve) => setTimeout(resolve, 500))
-        showSuccess(form, successText)
-        form.reset()
+        const original =
+          submit?.tagName === 'INPUT' ? submit.value : submit?.textContent || 'Submit'
+        setLoading(submit, true, original)
 
-        if (submit) {
-          submit.disabled = false
-          if (submit.tagName === 'INPUT') submit.value = original
-          else submit.textContent = original
+        try {
+          await new Promise((resolve) => setTimeout(resolve, 650))
+          showSuccess(form, successText)
+          form.reset()
+          onSuccess?.(form)
+        } catch {
+          setLoading(submit, false, original)
+          showError(form, 'Something went wrong. Please try again.')
         }
       },
       true,
@@ -181,6 +244,8 @@
 
   function wirePasswordToggles(root = document) {
     root.querySelectorAll('[data-toggle-password]').forEach((btn) => {
+      if (btn.dataset.vpntecoEye === '1') return
+      btn.dataset.vpntecoEye = '1'
       btn.addEventListener('click', () => {
         const id = btn.getAttribute('data-toggle-password')
         const input = root.querySelector(`#${CSS.escape(id)}`)
@@ -193,36 +258,42 @@
     })
   }
 
-  function init() {
-    document.querySelectorAll('form.contact-form').forEach((form) => {
-      wireSubmit(form, { successText: 'Thanks! Your message has been sent. We’ll get back to you soon.' })
+  function initVpntecoForms(root = document) {
+    const scope = root.querySelectorAll ? root : document
+
+    scope.querySelectorAll('form.contact-form').forEach((form) => {
+      wireSubmit(form, {
+        successText: 'Thanks! Your message has been sent. We’ll get back to you soon.',
+      })
     })
-    document.querySelectorAll('form.newslatter-form, form.newsletter-form').forEach((form) => {
-      wireSubmit(form, { successText: 'You’re subscribed. Welcome to Vpnteco updates.' })
+
+    scope.querySelectorAll('form.newslatter-form, form.newsletter-form').forEach((form) => {
+      wireSubmit(form, {
+        successText: 'You’re subscribed. Welcome to Vpnteco updates.',
+      })
     })
-    document.querySelectorAll('form.auth-form').forEach((form) => {
+
+    scope.querySelectorAll('form.auth-form').forEach((form) => {
       const kind = form.dataset.auth || 'signin'
       wireSubmit(form, {
         successText:
           kind === 'signup'
             ? 'Account created. You can now sign in and start browsing privately.'
-            : 'Signed in successfully. Redirecting you to Vpnteco…',
-      })
-      form.addEventListener(
-        'submit',
-        () => {
+            : 'Signed in successfully. Taking you to Vpnteco…',
+        onSuccess: () => {
           if (kind !== 'signin') return
-          setTimeout(() => {
-            if (form.style.display === 'none') window.location.href = '/vpnteco/'
-          }, 1100)
+          window.setTimeout(() => {
+            window.location.assign('/vpnteco/')
+          }, 900)
         },
-        true,
-      )
+      })
     })
-    wirePasswordToggles()
 
-    // Keep Oops blocks hidden if Webflow tries to resurface them.
-    document.querySelectorAll('.w-form-fail, .error-message, .form-error').forEach((error) => {
+    wirePasswordToggles(scope)
+
+    scope.querySelectorAll('.w-form-fail, .error-message, .form-error').forEach((error) => {
+      if (error.dataset.vpntecoObserved === '1') return
+      error.dataset.vpntecoObserved = '1'
       error.setAttribute('hidden', '')
       error.style.setProperty('display', 'none', 'important')
       const observer = new MutationObserver(() => {
@@ -235,6 +306,11 @@
     })
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init)
-  else init()
+  window.initVpntecoForms = initVpntecoForms
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => initVpntecoForms(document))
+  } else {
+    initVpntecoForms(document)
+  }
 })()
