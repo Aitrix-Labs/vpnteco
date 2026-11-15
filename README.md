@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-Open: http://localhost:5181/vpnteco/
+Open: http://localhost:5181/
 
 ## Build
 
@@ -17,7 +17,7 @@ Open: http://localhost:5181/vpnteco/
 npm run build
 ```
 
-Output lands in `dist/` for GitHub Pages at `/vpnteco/`.
+Output lands in `dist/` for GitHub Pages at the custom domain root (`vpnteco.com`).
 
 ## Notes
 

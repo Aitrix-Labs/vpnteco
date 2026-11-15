@@ -11,10 +11,9 @@ export function toAppPath(href: string): string | null {
     const url = new URL(href, window.location.origin)
     if (url.origin !== window.location.origin) return null
     let path = url.pathname
-    if (!path.startsWith('/vpnteco')) return null
-    path = path.replace(/^\/vpnteco/, '') || '/'
+    if (path.startsWith('/assets/') || path.startsWith('/assets')) return null
     path = path.replace(/\.html$/, '')
-    if (path === '/index') path = '/'
+    if (path === '/index' || path === '') path = '/'
     return path + url.search + url.hash
   } catch {
     return null

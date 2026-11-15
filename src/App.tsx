@@ -21,7 +21,7 @@ export default function App() {
   const known = pages.map((page) => page.route)
 
   return (
-    <BrowserRouter basename="/vpnteco">
+    <BrowserRouter>
       <ScrollToTop />
       <Routes>
         {known.map((route) => (

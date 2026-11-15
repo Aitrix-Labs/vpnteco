@@ -24,19 +24,19 @@ const pageFiles = [
 
 function rewriteLinks(html) {
   return html
-    .replaceAll('href="/vpnteco/features.html"', 'href="/vpnteco/features"')
-    .replaceAll('href="/vpnteco/about.html"', 'href="/vpnteco/about"')
-    .replaceAll('href="/vpnteco/contact.html"', 'href="/vpnteco/contact"')
-    .replaceAll('href="/vpnteco/pricing.html"', 'href="/vpnteco/pricing"')
-    .replaceAll('href="/vpnteco/blog.html"', 'href="/vpnteco/blog"')
-    .replaceAll('href="/vpnteco/licenses.html"', 'href="/vpnteco/licenses"')
-    .replaceAll('href="/vpnteco/changelog.html"', 'href="/vpnteco/changelog"')
-    .replaceAll('href="/vpnteco/style-guide.html"', 'href="/vpnteco/style-guide"')
-    .replaceAll('href="/vpnteco/signin.html"', 'href="/vpnteco/signin"')
-    .replaceAll('href="/vpnteco/signup.html"', 'href="/vpnteco/signup"')
-    .replaceAll('href="/vpnteco/401.html"', 'href="/vpnteco/401"')
-    .replaceAll('href="/vpnteco/404.html"', 'href="/vpnteco/404"')
-    .replaceAll('href="/vpnteco/index.html"', 'href="/vpnteco/"')
+    .replaceAll('href="/features.html"', 'href="/features"')
+    .replaceAll('href="/about.html"', 'href="/about"')
+    .replaceAll('href="/contact.html"', 'href="/contact"')
+    .replaceAll('href="/pricing.html"', 'href="/pricing"')
+    .replaceAll('href="/blog.html"', 'href="/blog"')
+    .replaceAll('href="/licenses.html"', 'href="/licenses"')
+    .replaceAll('href="/changelog.html"', 'href="/changelog"')
+    .replaceAll('href="/style-guide.html"', 'href="/style-guide"')
+    .replaceAll('href="/signin.html"', 'href="/signin"')
+    .replaceAll('href="/signup.html"', 'href="/signup"')
+    .replaceAll('href="/401.html"', 'href="/401"')
+    .replaceAll('href="/404.html"', 'href="/404"')
+    .replaceAll('href="/index.html"', 'href="/"')
 }
 
 function extract(html) {

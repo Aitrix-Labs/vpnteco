@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const siteDir = path.join(root, 'site')
-const base = '/vpnteco'
+const base = ''
 
 function page(kind) {
   const isSignIn = kind === 'signin'

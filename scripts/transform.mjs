@@ -7,7 +7,7 @@ const root = path.resolve(__dirname, '..')
 const publicDir = path.join(root, 'public')
 const rawDir = path.join(root, 'raw')
 const outDir = path.join(root, 'site')
-const base = '/vpnteco'
+const base = ''
 
 const pages = [
   { raw: '_raw.html', out: 'index.html', title: 'Vpnteco — Your Online Privacy, Fully Protected' },
