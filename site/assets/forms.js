@@ -283,7 +283,7 @@
         onSuccess: () => {
           if (kind !== 'signin') return
           window.setTimeout(() => {
-            window.location.assign('/vpnteco/')
+            window.location.assign('/')
           }, 900)
         },
       })
